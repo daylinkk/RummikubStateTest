@@ -47,6 +47,9 @@ public class TileGroup {
         return this.tiles;
     }
 
+    public void randomize(){}
+
+
     /**
      * returns this tile group as a string
      * it will be each tile followed by a comma
@@ -68,4 +71,6 @@ public class TileGroup {
 
         return groupString;
     }
+
+
 }
