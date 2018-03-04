@@ -19,6 +19,14 @@ public class TileGroup {
         this.tiles = new ArrayList<>();
     }
 
+    /**
+     * Copy constructor for tileGroups
+     * @param copyTileGroup
+     */
+    public TileGroup (TileGroup copyTileGroup){
+        tiles = copyTileGroup.tiles;
+    }
+
     public void add(Tile addTile){
         tiles.add(addTile);
     }

@@ -6,12 +6,7 @@ package com.example.daylinkuboyama.rummikubstatetest;
 
 public class TileSet extends TileGroup {
 
-    /**
-     * Boolean for if set is run
-     *  - false: set is book
-     *  - true: set is run
-     */
-    private boolean isRun;
+    private boolean isRun; //for sets: true = run, false = book
 
     /**
      * Constructor for TileSet
@@ -19,8 +14,17 @@ public class TileSet extends TileGroup {
     public TileSet(){
         super();
     }
+
     /**
-     * Check if
+     * Copy constructor for tileSets
+     * @param copyTileSet
+     */
+    public TileSet (TileSet copyTileSet){
+        isRun = copyTileSet.isRun;
+    }
+
+    /**
+     * Check if //todo finish method/comment
      * @return
      */
     public boolean isValidSet(){

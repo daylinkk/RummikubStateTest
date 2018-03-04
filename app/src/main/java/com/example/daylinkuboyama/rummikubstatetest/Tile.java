@@ -49,7 +49,7 @@ public class Tile {
     }
 
     /**
-     * Copy constructor
+     * Copy constructor for tiles
      * @param copyTile
      */
     public Tile(Tile copyTile){

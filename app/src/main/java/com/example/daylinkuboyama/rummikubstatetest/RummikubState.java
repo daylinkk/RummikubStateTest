@@ -7,57 +7,69 @@ import java.util.ArrayList;
  */
 
 public class RummikubState {
-    /*
-    #number of players
 
-    players hands
-        number of tiles
-        values of tiles
-    #score
-    tiles left in draw pile
-    #whose turn it is/current player
-    current state of the table
+    int numPlayers; //number of players in the game
 
-    #what players have melded
-     */
-
-    //number of players in the game
-    int numPlayers;
-
-    // These instance vaiables are parallel
+    // These instance variables are parallel to players[]
     String[] players; //names of players
-    TileGroup[] playerHands; // parallel to players
-    int[] playerScores; //parallel to players[], indicates score of each player
-    //parallel to players[], indicates weather each player has melded
-    boolean[] playersMelded;
+    TileGroup[] playerHands; //groups of tiles in players' hands
+    int[] playerScores; //indicates score of each player
+    boolean[] playersMelded; //indicates whether each player has melded
 
-    //index of players[], indicates whose turn it is
-    int currentPlayer;
+    int currentPlayer; //index of players[], indicates whose turn it is
 
-    TileGroup drawPile;
+    TileGroup drawPile; //tiles that are not played/in player's hand
 
     ArrayList<TileGroup> tableTileGroups;
 
     // TODO add a previous tableTileGroup variable
-
 
     public RummikubState(){
         this.numPlayers = 2;
         this.players = new String[numPlayers];
         this.players[0] = "Matt";
         this.players[1] = "Nux";
+
         this.playerHands = new TileGroup[numPlayers];
         this.playerHands[0] = new TileGroup();
         this.playerHands[1] = new TileGroup();
+
         this.playerScores = new int[numPlayers];
         this.playerScores[0] = 0;
         this.playerScores[1] = 0;
+
         this.playersMelded = new boolean[numPlayers];
         this.playersMelded[0] = false;
         this.playersMelded[1] = false;
+
         this.currentPlayer = 0;
         this.tableTileGroups = new ArrayList<>();
+    }
 
+    /**
+     * Copy constructor for gameState
+     * @param copy
+     */
+    public RummikubState (RummikubState copy) {
+        numPlayers = copy.numPlayers;
+        players = copy.players;
+        players[0] = copy.players[0];
+        players[1] = copy.players[1];
+
+        playerHands = copy.playerHands;
+        playerHands[0] = copy.playerHands[0];
+        playerHands[1] = copy.playerHands[1];
+
+        playerScores = copy.playerScores;
+        playerScores[0] = copy.playerScores[0];
+        playerScores[1] = copy.playerScores[1];
+
+        playersMelded = copy.playersMelded;
+        playersMelded[0] = copy.playersMelded[0];
+        playersMelded[1] = copy.playersMelded[1];
+
+        currentPlayer = copy.currentPlayer;
+        tableTileGroups = copy.tableTileGroups;
     }
 
     private void initDrawPile(){
