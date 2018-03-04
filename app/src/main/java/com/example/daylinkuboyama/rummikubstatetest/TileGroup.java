@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class TileGroup {
 
     //an array list of tile objects
-    ArrayList <Tile> tiles;
+    private ArrayList <Tile> tiles;
 
     public TileGroup(){
         this.tiles = new ArrayList<>();
@@ -29,6 +29,22 @@ public class TileGroup {
 
     public void add(Tile addTile){
         tiles.add(addTile);
+    }
+
+    public void remove(Tile remove){
+        this.tiles.remove(remove);
+    }
+
+    public int groupSize(){
+        return this.tiles.size();
+    }
+
+    public Tile getTile(int index){
+        return this.tiles.get(index);
+    }
+
+    public ArrayList getTileGroup(){
+        return this.tiles;
     }
 
 
