@@ -20,7 +20,7 @@ public class RummikubState {
 
     TileGroup drawPile; //tiles that are not played/in player's hand
 
-    ArrayList<TileGroup> tableTileGroups;
+    ArrayList<TileGroup> tableTileGroups; //tiles and sets on the table
 
     // TODO add a previous tableTileGroup variable
 
@@ -29,6 +29,8 @@ public class RummikubState {
         this.players = new String[numPlayers];
         this.players[0] = "Matt";
         this.players[1] = "Nux";
+
+        initDrawPile();
 
         this.playerHands = new TileGroup[numPlayers];
         this.playerHands[0] = new TileGroup();
@@ -69,6 +71,7 @@ public class RummikubState {
         playersMelded[1] = copy.playersMelded[1];
 
         currentPlayer = copy.currentPlayer;
+
         tableTileGroups = copy.tableTileGroups;
     }
 
@@ -77,9 +80,202 @@ public class RummikubState {
         for(int i = 0; i < 2; i++){
             for(int val = 1; val <= 13; val++){
                 for(int col = 0; col <= 3; col++){
-                    drawPile.add(new Tile(-1, -1, val, col));
+                    drawPile.add(new Tile(-1, -1, val, Tile.colorArray[col]));
                 }
             }
         }
+    }
+
+    /**
+     * this state as a string
+     * will be the variable name followed by a colon and newline
+     * then the value of the variable
+     * e.g. for numPlayers part of the string:
+     * "numPlayers:\n
+     * 2\n"
+     *
+     * in the case of arrays it will look like this:
+     * "playerHands[0]:\n
+     * B7,U8\n
+     * playerHands[1]:\n
+     * G8,R12\n"
+     *
+     * @return a string representation of this state
+     */
+    public String toString(){
+        String stateString= "";
+
+        stateString+= getNumPlayerString();
+        stateString+= getPlayersString();
+        stateString+= getPlayerHandsString();
+        stateString+= getPlayerScoresString();
+        stateString+= getPlayersMeldedString();
+        stateString+= getCurrentPlayerString();
+        stateString+= getDrawPileString();
+        stateString+= getTableTileGroupString();
+
+        return stateString;
+    }
+
+    /**
+     *
+     * @return string representation of the variable numPlayers
+     */
+    private String getNumPlayerString(){
+        return "numPlayers:\n"+
+                numPlayers+"\n";
+    }
+
+    /**
+     *looks like:
+     *
+     * players[0]:
+     * Matt
+     * players[1]:
+     * Nux
+     *
+     * @return string representation of the array players
+     */
+    private String getPlayersString(){
+        //playerString is the string of the entire players array
+        String playersString= "";
+        for(int i=0;i<numPlayers;i++){
+            //currPlayerString is each string in players
+            String currPlayerString=
+                    "players["+i+"]:\n";
+            currPlayerString+= players[i];
+            currPlayerString+= "\n";
+
+            playersString+= currPlayerString;
+        }
+
+        return playersString;
+    }
+
+    /**
+     *looks like:
+     *
+     * playerScores[0]:
+     * 89
+     * playerScores[1]:
+     * -45
+     *
+     * @return string representation of the array playerScores
+     */
+    private String getPlayerScoresString(){
+        //playerScoresString is the string of the entire playersScores array
+        String playerScoresString= "";
+        for(int i=0;i<numPlayers;i++){
+            String currPlayerScoreString=
+                    "playerScores["+i+"]:\n";
+            currPlayerScoreString+= String.valueOf(playerScores[i]);
+            currPlayerScoreString+= "\n";
+
+            playerScoresString+= currPlayerScoreString;
+        }
+
+        return playerScoresString;
+    }
+
+    /**
+     *looks like:
+     *
+     * playerHands[0]:
+     * B6,R8
+     * playerHands[1]:
+     * G12,U5,B6
+     *
+     * @return string representation of the array playerHands
+     */
+    private String getPlayerHandsString(){
+        //playerHandsString is the string of the entire playersHands array
+        String playerHandsString= "";
+        for(int i=0;i<numPlayers;i++){
+            //currPlayerHandsString is each string in of a single player's hand
+            String currPlayerHandsString=
+                    "playerHands["+i+"]:\n";
+            currPlayerHandsString+= playerHands[i].toString();
+            currPlayerHandsString+= "\n";
+
+            playerHandsString+= currPlayerHandsString;
+        }
+
+        return playerHandsString;
+    }
+
+    /**
+     * looks like:
+     *
+     * playersMelded[0]:
+     * T
+     * playersMelded[1]:
+     * F
+     *
+     * @return string representation of the array playersMelded
+     */
+    private String getPlayersMeldedString(){
+        //playersMeldedString is the string of the entire playersMelded array
+        String playersMeldedString= "";
+        for(int i=0;i<numPlayers;i++){
+            //currPlayerHandsString is each string in of a single player's hand
+            String currPlayerMeldedString=
+                    "playersMelded["+i+"]:\n";
+
+            if(playersMelded[i]) currPlayerMeldedString+= "T";
+            else currPlayerMeldedString+= "F";
+            currPlayerMeldedString+= "\n";
+
+            playersMeldedString+= currPlayerMeldedString;
+        }
+
+        return playersMeldedString;
+    }
+
+    /**
+     *
+     * @return string representation of the variable currentPlayer
+     */
+    private String getCurrentPlayerString(){
+        return "currentPlayer:\n"+
+                currentPlayer+"\n";
+    }
+
+    /**
+     *
+     * @return string representation of the variable drawPile
+     */
+    private String getDrawPileString(){
+        return "drawPile:\n"+
+                drawPile.toString()+"\n";
+    }
+
+    /**
+     * looks like:
+     *
+     * tableTileGroups<0>:
+     * B7
+     * tableTileGroups<1>:
+     * U8,B8,R8_Book
+     * tableTileGroups<2>:
+     * G4,G5,G6_Run
+     *
+     * @return string representation of the arraylist tableTileGroups
+     */
+    private String getTableTileGroupString(){
+        String tableGroupsString= "";
+        for(int i=0;i<tableTileGroups.size();i++){
+            TileGroup currGroup= tableTileGroups.get(i);
+
+            //currGroupString is each group in the arraylist as a string
+            String currGroupString=
+                    "tableTileGroups<"+i+">:\n";
+
+            currGroupString+= currGroup.toString();
+            currGroupString+= "\n";
+
+            tableGroupsString+= currGroupString;
+        }
+
+        return tableGroupsString;
     }
 }

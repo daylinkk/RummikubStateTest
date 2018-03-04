@@ -31,5 +31,23 @@ public class TileSet extends TileGroup {
         return false;
     }
 
+    /**
+     * this tile set as a string
+     * it will be the tilegroup string
+     * immediately followed by a "_"
+     * immediately followed by "Book" for a book
+     * or "Run" for a run
+     *
+     * @return a string representation of this tilegroup
+     */
+    public String toString(){
+        String groupString= super.toString();
+
+        String typeString= "";
+        if(isRun) typeString= "Run";
+        else typeString= "Book";
+
+        return groupString + "_" + typeString;
+    }
 
 }

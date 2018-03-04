@@ -31,6 +31,25 @@ public class TileGroup {
         tiles.add(addTile);
     }
 
+    /**
+     * returns this tile group as a string
+     * it will be each tile followed by a comma
+     * @return a string representation of this tile group
+     */
+    public String toString(){
+        //if empty, return empty string
+        if(tiles.size() == 0) return "";
 
+        String groupString= "";
 
+        for(Tile t : tiles){
+            groupString+= t.toString();
+            groupString+= ',';
+        }
+
+        //remove last comma
+        groupString= groupString.substring(0,groupString.length()-1);
+
+        return groupString;
+    }
 }
