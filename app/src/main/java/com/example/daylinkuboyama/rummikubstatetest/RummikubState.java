@@ -20,9 +20,9 @@ public class RummikubState {
     //parallel to players[], indicates weather each player has melded
 
     private int currentPlayer; //index of players[], indicates whose turn it is
-    //index of players[], indicates whose turn it is
-    private Boolean crrentPlayerPlayed;
-    //ArrayList<ArrayList<TileGroup>> tableChanges;
+    private Boolean currentPlayerPlayed; // Boolean for if the CurrentPlayer has made valid move
+    //private ArrayList<RummikubState> pastTableTileGroup;
+
 
     private TileGroup drawPile; //tiles that are not played/in player's hand
 
@@ -31,6 +31,9 @@ public class RummikubState {
     // TODO add a previous tableTileGroup variable
 
 
+    /**
+     * RumikubState Constructor
+     */
     public RummikubState() {
         this.numPlayers = 2;
         this.players = new String[numPlayers];
@@ -52,6 +55,7 @@ public class RummikubState {
         this.playersMelded[1] = false;
 
         this.currentPlayer = 0;
+        this.currentPlayerPlayed = false;
         this.tableTileGroups = new ArrayList<>();
     }
 
@@ -82,6 +86,9 @@ public class RummikubState {
         tableTileGroups = copy.tableTileGroups;
     }
 
+    /**
+     * Initial Setup State's Draw Pile
+     */
     private void initDrawPile(){
         drawPile = new TileGroup();
         for(int i = 0; i < 2; i++){
@@ -93,7 +100,10 @@ public class RummikubState {
         }
     }
 
-
+    /**
+     * Method to draw and add tile to player's hand and update state
+     * @param playerID
+     */
     private void drawTile(int playerID){
         int p;
         for(p = 0; p < numPlayers; p++){
@@ -107,26 +117,80 @@ public class RummikubState {
         }
     }
 
+    /**
+     * Helper method which returns if a player can draw
+     * @param playerID
+     * @return
+     *  - false - if player has made move and can't draw
+     *  - true - if player hasn't made move
+     */
     private Boolean canDraw(int playerID){
+        if (currentPlayer == playerID){
+            if(!(currentPlayerPlayed)){
+                return true;
+            }
+        }
         return false;
     }
 
+    /**
+     * Helper method which returns if a player can knock
+     * @param playerID
+     * @return
+     *  - false - if player has not made move and can't knock
+     *  - true - if player has made move, end turn
+     */
     private Boolean canKnock(int playerID){
+        if (currentPlayer == playerID){
+            if(currentPlayerPlayed){
+                return true;
+            }
+        }
         return false;
     }
 
+    /**
+     * Method checks if a TileGroup is a valid Set to play
+     * @param playerID
+     * @param tiles
+     * @return
+     */
     private Boolean validMove(int playerID, TileGroup tiles){
+        if (tiles instanceof TileSet){
+            if(currentPlayer == playerID){
+                if(((TileSet) tiles).isValidSet()){
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
+    /**
+     * Method to determine if a player can make a move.
+     * @param playerID
+     * @return
+     */
     private Boolean canUndo(int playerID){
         return false;
     }
 
+    /**
+     *
+     * @param playerID
+     * @return
+     */
     private Boolean canShowMenue(int playerID){
         return false;
     }
 
+    /**
+     *
+     * @param playerID
+     * @param tile
+     * @return
+     */
     private Boolean canSelectTile(int playerID, Tile tile){
         return false;
     }
