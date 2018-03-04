@@ -47,7 +47,43 @@ public class TileGroup {
         return this.tiles;
     }
 
-    public void randomize(){}
+    /**
+     * arranges this tile group into a random order
+     */
+    public void randomize(){
+        //go through the array list and choose a rondom position to swap with
+        for(int i=0;i<tiles.size();i++){
+            int randPos= (int)(Math.random()*tiles.size());
+            //now swap them
+            Tile temp= tiles.get(i);
+            tiles.set(i,tiles.get(randPos));
+            tiles.set(randPos,temp);
+        }
+
+        /**
+         * External Citation
+         * Source:
+         *  Java ArrayList doc
+         * Problem:
+         *  how to set specific index in array list
+         * Solution:
+         *  use set(int,object) method
+         */
+    }
+
+    /**
+     * removes the top tile from the group and returns it
+     * @return the top tile in the group
+     *         null if empty group
+     */
+    public Tile draw(){
+        if(tiles.size() == 0) return null;
+
+        Tile topTile= getTile(tiles.size()-1);
+        remove(topTile);
+
+        return topTile;
+    }
 
 
     /**

@@ -40,8 +40,11 @@ public class RummikubState {
         initDrawPile();
 
         this.playerHands = new TileGroup[numPlayers];
+
         this.playerHands[0] = new TileGroup();
         this.playerHands[1] = new TileGroup();
+
+        dealHands();
 
         this.playerScores = new int[numPlayers];
         this.playerScores[0] = 0;
@@ -89,6 +92,19 @@ public class RummikubState {
                 for(int col = 0; col <= 3; col++){
                     drawPile.add(new Tile(-1, -1, val, Tile.colorArray[col]));
                 }
+            }
+        }
+
+        drawPile.randomize();
+    }
+
+    /**
+     * deals 14 tiles from drawpile to each player's hand
+     */
+    private void dealHands(){
+        for(int i=0;i<14;i++){
+            for(int j=0;j<numPlayers;j++){
+                playerHands[j].add(drawPile.draw());
             }
         }
     }
