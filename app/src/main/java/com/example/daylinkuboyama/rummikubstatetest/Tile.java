@@ -125,6 +125,7 @@ public class Tile {
      *
      * @return this Tile as a string
      */
+    @Override
     public String toString(){
         String colorChar= "";
 
