@@ -1,6 +1,7 @@
 package com.example.daylinkuboyama.rummikubstatetest;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by daylinkuboyama on 2/27/18.
@@ -8,23 +9,29 @@ import java.util.ArrayList;
 
 public class RummikubState {
 
-    int numPlayers; //number of players in the game
+    private int numPlayers; //number of players in the game
 
     // These instance variables are parallel to players[]
-    String[] players; //names of players
-    TileGroup[] playerHands; //groups of tiles in players' hands
-    int[] playerScores; //indicates score of each player
-    boolean[] playersMelded; //indicates whether each player has melded
+    private String[] players; //names of players
+    private TileGroup[] playerHands; //groups of tiles in players' hands
+    private int[] playerScores; //indicates score of each player
+    private boolean[] playersMelded; //indicates whether each player has melded
+    private int[] playersID;
+    //parallel to players[], indicates weather each player has melded
 
-    int currentPlayer; //index of players[], indicates whose turn it is
+    private int currentPlayer; //index of players[], indicates whose turn it is
+    //index of players[], indicates whose turn it is
+    private Boolean crrentPlayerPlayed;
+    //ArrayList<ArrayList<TileGroup>> tableChanges;
 
-    TileGroup drawPile; //tiles that are not played/in player's hand
+    private TileGroup drawPile; //tiles that are not played/in player's hand
 
-    ArrayList<TileGroup> tableTileGroups; //tiles and sets on the table
+    private ArrayList<TileGroup> tableTileGroups; //tiles and sets on the table
 
     // TODO add a previous tableTileGroup variable
 
-    public RummikubState(){
+
+    public RummikubState() {
         this.numPlayers = 2;
         this.players = new String[numPlayers];
         this.players[0] = "Matt";
@@ -84,6 +91,44 @@ public class RummikubState {
                 }
             }
         }
+    }
+
+
+    private void drawTile(int playerID){
+        int p;
+        for(p = 0; p < numPlayers; p++){
+            if (playerID == playersID[p]){
+                Random rando = new Random();
+                int randomint = rando.nextInt(drawPile.groupSize()-1);
+                Tile tempTile = drawPile.getTile(randomint);
+                drawPile.getTileGroup().remove(randomint);
+                playerHands[p].add(tempTile);
+            }
+        }
+    }
+
+    private Boolean canDraw(int playerID){
+        return false;
+    }
+
+    private Boolean canKnock(int playerID){
+        return false;
+    }
+
+    private Boolean validMove(int playerID, TileGroup tiles){
+        return false;
+    }
+
+    private Boolean canUndo(int playerID){
+        return false;
+    }
+
+    private Boolean canShowMenue(int playerID){
+        return false;
+    }
+
+    private Boolean canSelectTile(int playerID, Tile tile){
+        return false;
     }
 
     /**
