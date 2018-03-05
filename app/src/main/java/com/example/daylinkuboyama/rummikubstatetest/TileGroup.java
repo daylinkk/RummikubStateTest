@@ -89,6 +89,19 @@ public class TileGroup {
         return topTile;
     }
 
+    /**
+     * Helper method to find if a TileGroup has a given tile
+     * @param findTile
+     * @return
+     */
+    public Boolean contains(Tile findTile){
+        if(tiles.contains(findTile)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     /**
      * returns this tile group as a string

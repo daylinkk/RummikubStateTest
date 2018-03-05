@@ -12,27 +12,22 @@ import java.util.Random;
 public class RummikubState {
 
     private int numPlayers; //number of players in the game
-    private int[] playersID;
 
     // These instance variables are parallel to players[]
+    // Instance variables for Player information
     private String[] players; //names of players
     private TileGroup[] playerHands; //groups of tiles in players' hands
     private int[] playerScores; //indicates score of each player
     private boolean[] playersMelded; //indicates whether each player has melded
-
+    private int[] playersID; //parallel to players[], indicates weather each player has melded
     private int currentPlayer; //index of players[], indicates whose turn it is
-
-    //todo what is the next 3 lines?
-    //index of players[], indicates whose turn it is
-    //private Boolean crrentPlayerPlayed;
-    //ArrayList<ArrayList<TileGroup>> tableChanges;
+    private Boolean currentPlayerPlayed; //Boolean if Current player has made a move yet.
 
     private TileGroup drawPile; //tiles that are not played/in player's hand
 
     private ArrayList<TileGroup> tableTileGroups; //tiles and sets on the table
-
+    private ArrayList<RummikubState> tableTileHistory; //State of board after every move.
     // TODO add a previous tableTileGroup variable
-
 
     /**
      * RumikubState Constructor
@@ -150,6 +145,20 @@ public class RummikubState {
     }
 
     /**
+     * Helper method that returns boolean if the given playerID has
+     * @param playerID
+     * @return
+     */
+    private Boolean isPlayerTurn(int playerID){
+        if(playerID == playersID[currentPlayer]){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
      * Method to draw and add tile to player's hand and update state
      * @param playerID
      */
@@ -174,12 +183,13 @@ public class RummikubState {
      *  - true - if player hasn't made move
      */
     private Boolean canDraw(int playerID){
-        if (currentPlayer == playerID){
+        if (isPlayerTurn(playerID)){
             if(!(currentPlayerPlayed)){
                 return true;
             }
         }
         return false;
+
     }
 
     /**
@@ -190,7 +200,7 @@ public class RummikubState {
      *  - true - if player has made move, end turn
      */
     private Boolean canKnock(int playerID){
-        if (currentPlayer == playerID){
+        if (isPlayerTurn(playerID)){
             if(currentPlayerPlayed){
                 return true;
             }
@@ -206,7 +216,7 @@ public class RummikubState {
      */
     private Boolean validMove(int playerID, TileGroup tiles){
         if (tiles instanceof TileSet){
-            if(currentPlayer == playerID){
+            if(isPlayerTurn(playerID)){
                 if(((TileSet) tiles).isValidSet()){
                     return true;
                 }
@@ -222,17 +232,23 @@ public class RummikubState {
      * @return
      */
     private Boolean canUndo(int playerID){
+        if(isPlayerTurn(playerID)){
+            if(currentPlayerPlayed){
+                return true;
+            }
+        }
         return false;
     }
 
     /**
-     *
+     * Player can select the menu to display a popup
      * @param playerID
      * @return
      */
     private Boolean canShowMenue(int playerID){
         return false;
     }
+    // Returns false until menu popup function TODO update once menu setup
 
     /**
      *
@@ -241,6 +257,11 @@ public class RummikubState {
      * @return
      */
     private Boolean canSelectTile(int playerID, Tile tile){
+        if (isPlayerTurn(playerID)){
+            if(playerHands[currentPlayer].contains(tile)){
+                return true;
+            }
+        }
         return false;
     }
 
