@@ -21,10 +21,14 @@ public class TileGroup {
 
     /**
      * Copy constructor for tileGroups
-     * @param copyTileGroup
+     * @param copyTileGroup tileGroup to copy
      */
     public TileGroup (TileGroup copyTileGroup){
-        tiles = copyTileGroup.tiles;
+        tiles = new ArrayList<>();
+
+        for (Tile t : copyTileGroup.tiles) {
+            tiles.add (new Tile(t));
+        }
     }
 
     public void add(Tile addTile){

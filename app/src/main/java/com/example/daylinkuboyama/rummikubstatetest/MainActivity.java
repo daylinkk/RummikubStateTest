@@ -1,17 +1,13 @@
 package com.example.daylinkuboyama.rummikubstatetest;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity /*implements View.OnClickListener*/ {
 
-    Button runTestButton = (Button)findViewById(R.id.buttonRunTest);
-    EditText runTestText = (EditText) findViewById(R.id.editTextRunTest);
+    //Button runTestButton = (Button)findViewById(R.id.buttonRunTest);
+    //EditText runTestText = (EditText) findViewById(R.id.editTextRunTest);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,11 +16,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         RummikubState state= new RummikubState();
 
+        RummikubState state2 = new RummikubState(state);
+
         Log.i("TAG",state.toString());
+        Log.i("TAG",state2.toString());
     }
 
-    @Override
+    //@Override
     //listener for the runTest button
+    /**
     public void onClick(View v) {
         runTestText.setText("");
 
@@ -50,4 +50,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+     **/
 }

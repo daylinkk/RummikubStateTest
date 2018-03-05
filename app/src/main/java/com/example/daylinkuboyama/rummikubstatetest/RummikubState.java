@@ -20,6 +20,8 @@ public class RummikubState {
     //parallel to players[], indicates weather each player has melded
 
     private int currentPlayer; //index of players[], indicates whose turn it is
+
+    //todo what is the next 3 lines?
     //index of players[], indicates whose turn it is
     private Boolean crrentPlayerPlayed;
     //ArrayList<ArrayList<TileGroup>> tableChanges;
@@ -60,29 +62,47 @@ public class RummikubState {
 
     /**
      * Copy constructor for gameState
-     * @param copy
+     * @param copy rummikubState to copy
      */
     public RummikubState (RummikubState copy) {
+       //copies num of players
         numPlayers = copy.numPlayers;
-        players = copy.players;
-        players[0] = copy.players[0];
-        players[1] = copy.players[1];
 
-        playerHands = copy.playerHands;
-        playerHands[0] = copy.playerHands[0];
-        playerHands[1] = copy.playerHands[1];
+        //copies names of players
+        players = new String [numPlayers];
+        for (int i = 0; i < numPlayers; i++) {
+            this.players[i] = new String (copy.players[i]);
+        }
 
-        playerScores = copy.playerScores;
-        playerScores[0] = copy.playerScores[0];
-        playerScores[1] = copy.playerScores[1];
+        //copies players' hands
+        playerHands = new TileGroup[numPlayers];
+        for (int i = 0; i < numPlayers; i++) {
+            this.playerHands[i] = new TileGroup (copy.playerHands[i]);
+        }
 
-        playersMelded = copy.playersMelded;
-        playersMelded[0] = copy.playersMelded[0];
-        playersMelded[1] = copy.playersMelded[1];
+        //copies players' scores
+        playerScores = new int [numPlayers];
+        for (int i = 0; i < numPlayers; i++) {
+            playerScores[i] = playerScores[i];
+        }
 
+        //copies boolean[] whether player melded or not
+        playersMelded = new boolean[numPlayers];
+        for (int i = 0; i < numPlayers; i++) {
+            playersMelded[i] = playersMelded[i];
+        }
+
+        //copies current player
         currentPlayer = copy.currentPlayer;
 
-        tableTileGroups = copy.tableTileGroups;
+        //copies draw pile
+        drawPile = new TileGroup (copy.drawPile);
+
+        //copies tableTileGroups
+        tableTileGroups = new ArrayList <TileGroup>();
+        for (TileGroup group : copy.tableTileGroups){
+            this.tableTileGroups.add(new TileGroup (group));
+        }
     }
 
     private void initDrawPile(){
