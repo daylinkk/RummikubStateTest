@@ -3,11 +3,17 @@ package com.example.daylinkuboyama.rummikubstatetest;
 import java.util.ArrayList;
 
 /**
+ * class TileGroup
+ *
  * purpose: A generic grouping of tiles
  * (example: Tiles in player's racks)
  * check values of set when melding
  *
- * Created by daylinkuboyama on 2/27/18.
+ *
+ * @author Daylin Kuboyama
+ * @author Harry Thoma
+ * @author Riley Snook
+ * @author Chris Lytle
  */
 
 public class TileGroup {

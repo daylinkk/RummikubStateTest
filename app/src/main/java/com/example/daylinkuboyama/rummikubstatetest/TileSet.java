@@ -1,7 +1,14 @@
 package com.example.daylinkuboyama.rummikubstatetest;
 
 /**
- * Created by daylinkuboyama on 2/27/18.
+ * class TileSet
+ *
+ *
+ *
+ * @author Daylin Kuboyama
+ * @author Harry Thoma
+ * @author Riley Snook
+ * @author Chris Lytle
  */
 
 public class TileSet extends TileGroup {

@@ -6,7 +6,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Created by daylinkuboyama on 2/27/18.
+ * class RummikubState
+ *
+ *
+ *
+ * @author Daylin Kuboyama
+ * @author Harry Thoma
+ * @author Riley Snook
+ * @author Chris Lytle
  */
 
 public class RummikubState {
@@ -26,7 +33,10 @@ public class RummikubState {
     private TileGroup drawPile; //tiles that are not played/in player's hand
 
     private ArrayList<TileGroup> tableTileGroups; //tiles and sets on the table
-    private ArrayList<RummikubState> tableTileHistory; //State of board after every move.
+
+    //the previous state of the game, used for undo
+    private RummikubState prevState;
+
     // TODO add a previous tableTileGroup variable
 
     /**
@@ -58,15 +68,29 @@ public class RummikubState {
         this.currentPlayer = 0;
         this.currentPlayerPlayed = false;
         this.tableTileGroups = new ArrayList<>();
+
+        this.prevState= null;
     }
 
     /**
      * Copy constructor for gameState
      * @param copy rummikubState to copy
      * @param playerIndex player that this is a copy for
+     *                    if playerIndex == -1, a complete copy is made
      */
     public RummikubState (RummikubState copy, int playerIndex) {
-        if (0 < playerIndex && playerIndex < copy.numPlayers) {
+        this.setThisToCopy(copy,playerIndex);
+    }
+
+    /**
+     * Called from copy contructor for gameState
+     * sets this RummikubState to a deep copy of copy
+     * @param copy rummikubState to copy
+     * @param playerIndex player that this is a copy for
+     *                    if playerIndex == -1, a complete copy is made
+     */
+    private void setThisToCopy(RummikubState copy, int playerIndex){
+        if (-1 <= playerIndex && playerIndex < copy.numPlayers) {
             //copies num of players
             numPlayers = copy.numPlayers;
 
@@ -78,10 +102,8 @@ public class RummikubState {
 
             //copies players' hands
             playerHands = new TileGroup[numPlayers];
-
-
             for (int i = 0; i < numPlayers; i++) {
-                if (i == playerIndex) {
+                if (i == playerIndex || playerIndex == -1) {
                     this.playerHands[i] = new TileGroup(copy.playerHands[i]);
                 } else {
                     this.playerHands[i] = null;
@@ -103,14 +125,25 @@ public class RummikubState {
             //copies current player
             currentPlayer = copy.currentPlayer;
 
-            //copies draw pile
-            drawPile = null;
+            //copies draw pile, invisible to all players
+            if(playerIndex == -1){
+                this.drawPile= new TileGroup(copy.drawPile);
+            }
+            else drawPile = null;
 
             //copies tableTileGroups
             tableTileGroups = new ArrayList<TileGroup>();
             for (TileGroup group : copy.tableTileGroups) {
                 this.tableTileGroups.add(new TileGroup(group));
             }
+
+            //copies prevstate, invisible to all players
+            if(playerIndex == -1){
+                if(copy.prevState != null) { //if there is a prevState to copy
+                    this.prevState = new RummikubState(copy.prevState, -1);
+                }
+            }
+            else prevState = null;
         }
         else {
             Log.i ("state copy", "Invalid player index");
@@ -149,7 +182,7 @@ public class RummikubState {
      * @param playerID
      * @return
      */
-    private Boolean isPlayerTurn(int playerID){
+    private boolean isPlayerTurn(int playerID){
         if(playerID == playersID[currentPlayer]){
             return true;
         }
@@ -182,6 +215,44 @@ public class RummikubState {
      *  - false - if player has made move and can't draw
      *  - true - if player hasn't made move
      */
+    /**
+     * sets prevState to a copy of the current state
+     */
+    private void saveState(){
+        this.prevState= new RummikubState(this,-1);
+    }
+
+    /**
+     * sets this state to the previous state
+     * used for undo
+     * @return whether there was a prevstate to restore
+     */
+    private boolean restorePrevState(){
+        if(prevState == null) return false;
+
+        setThisToCopy(this.prevState,-1);
+        return true;
+    }
+
+    /**
+     * changes this state to reflect the furthest back prevState
+     * used for revert
+     * @return whether there was a prevstate to revert to
+     */
+    private boolean revertState(){
+        if(prevState == null) return false;
+
+        //walk through prevStates until you get to the first
+        RummikubState curr= this;
+        while(curr.prevState != null){
+            curr= curr.prevState;
+        }
+
+        //now curr is the furthest back saved state
+        setThisToCopy(curr,-1);
+        return true;
+    }
+
     private Boolean canDraw(int playerID){
         if (isPlayerTurn(playerID)){
             if(!(currentPlayerPlayed)){
@@ -371,6 +442,7 @@ public class RummikubState {
         //playerHandsString is the string of the entire playersHands array
         String playerHandsString= "";
         for(int i=0;i<numPlayers;i++){
+            if(playerHands[i] == null) continue;
             //currPlayerHandsString is each string in of a single player's hand
             String currPlayerHandsString=
                     "playerHands["+i+"]:\n";
@@ -425,6 +497,7 @@ public class RummikubState {
      * @return string representation of the variable drawPile
      */
     private String getDrawPileString(){
+        if (drawPile == null) return "";
         return "drawPile:\n"+
                 drawPile.toString()+"\n";
     }
