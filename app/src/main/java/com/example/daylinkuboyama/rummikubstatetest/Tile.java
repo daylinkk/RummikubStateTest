@@ -51,7 +51,7 @@ public class Tile {
 
     /**
      * Copy constructor for tiles
-     * @param copyTile
+     * @param copyTile tile to copy
      */
     public Tile(Tile copyTile){
         this.x = copyTile.getX();

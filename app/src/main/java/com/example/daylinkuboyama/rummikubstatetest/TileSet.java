@@ -17,10 +17,11 @@ public class TileSet extends TileGroup {
 
     /**
      * Copy constructor for tileSets
-     * @param copyTileSet
+     * @param copyTileSet tileSet to copy
      */
     public TileSet (TileSet copyTileSet){
-        isRun = copyTileSet.isRun;
+        super (copyTileSet);
+        this.isRun = copyTileSet.isRun;
     }
 
     /**
