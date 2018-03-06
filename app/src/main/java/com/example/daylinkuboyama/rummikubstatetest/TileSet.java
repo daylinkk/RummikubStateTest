@@ -32,11 +32,98 @@ public class TileSet extends TileGroup {
     }
 
     /**
-     * Check if //todo finish method/comment
-     * @return
+     * Check if group is a valid set
+     * @param group the group to check
+     * @return whether group is a valid set
      */
-    public boolean isValidSet(){
-        return false;
+    public static boolean isValidSet(TileGroup group){
+        return (isRun(group) || isBook(group));
+    }
+
+    /**
+     *
+     * @param group the group to check
+     * @return wheter it is a run
+     */
+    private static boolean isRun(TileGroup group){
+        if(group == null) return false;
+        if(group.tiles.size() < 3 || group.tiles.size() > 13) return false;
+
+        //make a copy
+        group= new TileGroup(group);
+        Tile[] tileAr= new Tile[group.tiles.size()];
+        group.tiles.toArray(tileAr);
+
+        //bubble sort the list
+        for(int j= tileAr.length -1 ;j>=0;j--){
+            for (int i = 0; i < j; i++) {
+                if (tileAr[i].getValue() > tileAr[i + 1].getValue()) {
+                    Tile temp = tileAr[i];
+                    tileAr[i] = tileAr[i + 1];
+                    tileAr[i + 1] = temp;
+                }
+            }
+        }
+
+        int tileColor= tileAr[0].getColor();
+        //walk array and make sure they are in natural order
+        //and all same color
+        for(int i=1;i<tileAr.length;i++){
+            if(tileAr[i].getColor() != tileColor) return false;
+            if(tileAr[i-1].getValue()+1 != tileAr[i].getValue()) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @param group the group to check
+     * @return wheter it is a book
+     */
+    private static boolean isBook(TileGroup group){
+        if(group == null) return false;
+        if(group.tiles.size() < 3 || group.tiles.size() > 4) return false;
+
+        //whether we have seen each color
+        boolean seenRed= false;
+        boolean seenGreen= false;
+        boolean seenBlack= false;
+        boolean seenBlue= false;
+
+        int bookVal= group.tiles.get(0).getValue();
+        for(Tile t : group.tiles){
+            if(t.getValue() != bookVal){
+                return false;
+            }
+            int tileColor= t.getColor();
+            if(tileColor == Tile.RED){
+                if(seenRed){
+                    return false;
+                }
+                seenRed= true;
+            }
+            else if(tileColor == Tile.GREEN){
+                if(seenGreen){
+                    return false;
+                }
+                seenGreen= true;
+            }
+            else if(tileColor == Tile.BLACK){
+                if(seenBlack){
+                    return false;
+                }
+                seenBlack= true;
+            }
+            else if(tileColor == Tile.BLUE){
+                if(seenBlue){
+                    return false;
+                }
+                seenBlue= true;
+            }
+        }
+
+        return true;
     }
 
     /**

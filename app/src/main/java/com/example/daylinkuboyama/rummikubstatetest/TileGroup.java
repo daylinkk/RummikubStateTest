@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class TileGroup {
 
     //an array list of tile objects
-    private ArrayList <Tile> tiles;
+    protected ArrayList <Tile> tiles;
 
     /**
      * TileGroup Initial Constructor
@@ -46,6 +46,18 @@ public class TileGroup {
      */
     public void add(Tile addTile){
         tiles.add(addTile);
+    }
+
+    /**
+     * adds all tiles in addGroup to this group
+     * removes all tiles from addGroup
+     * @param addGroup the group to add to this group
+     */
+    public void merge(TileGroup addGroup){
+        for(Tile t : addGroup.tiles){
+            this.add(t);
+            addGroup.remove(t);
+        }
     }
 
     /**
@@ -116,6 +128,8 @@ public class TileGroup {
          *  use set(int,object) method
          */
     }
+
+
 
     /**
      * removes the top tile from the group and returns it

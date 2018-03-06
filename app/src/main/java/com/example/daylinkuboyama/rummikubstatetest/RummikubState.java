@@ -219,6 +219,7 @@ public class RummikubState {
      * sets prevState to a copy of the current state
      */
     private void saveState(){
+
         this.prevState= new RummikubState(this,-1);
     }
 
@@ -297,7 +298,7 @@ public class RummikubState {
     private boolean validMove(int playerID, TileGroup tiles){
         if (tiles instanceof TileSet){
             if(isPlayerTurn(playerID)){
-                if(((TileSet) tiles).isValidSet()){
+                if(((TileSet) tiles).isValidSet(tiles)){
                     return true;
                 }
             }
@@ -343,6 +344,29 @@ public class RummikubState {
             }
         }
         return false;
+    }
+
+    /**
+     * connects/merges two TileGroups
+     *
+     * @param playerID the id of the player who is taking action
+     * @param group1 the two groups to merge
+     * @param group2
+     * @return weather it was a valid move and merged
+     */
+    private boolean canConnect(int playerID, TileGroup group1, TileGroup group2){
+        if(!isPlayerTurn(playerID)) return false;
+        if(group1 == null || group2 == null) return false;
+        if(!isOnTable(group1) || !isOnTable(group2)) return false;
+
+        group1.merge(group2);
+        tableTileGroups.remove(group2);
+
+        return true;
+    }
+
+    private boolean isOnTable(TileGroup group){
+        return tableTileGroups.contains(group);
     }
 
     /**
