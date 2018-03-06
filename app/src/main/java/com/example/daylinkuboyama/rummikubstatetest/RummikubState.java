@@ -37,6 +37,8 @@ public class RummikubState {
 
     private TileGroup drawPile; //tiles that are not played/in player's hand
 
+    private int selectedGroup; //the index of group on table that is selected by player
+                                //-1 if nothing is selected
     private ArrayList<TileGroup> tableTileGroups; //tiles and sets on the table
 
     //the previous state of the game, used for undo
@@ -53,6 +55,10 @@ public class RummikubState {
         this.players[0] = "Matt";
         this.players[1] = "Nux";
         this.round = 1;
+
+        this.playersID = new int[numPlayers];
+        playersID[0] = 0;
+        playersID[1] = 1;
 
         initDrawPile();
 
@@ -73,6 +79,7 @@ public class RummikubState {
 
         this.currentPlayer = 0;
         this.currentPlayerPlayed = false;
+        this.selectedGroup = -1;
         this.tableTileGroups = new ArrayList<>();
 
         this.prevState= null;
@@ -106,6 +113,12 @@ public class RummikubState {
                 this.players[i] = new String(copy.players[i]);
             }
 
+            //copies playersID array
+            playersID = new int[numPlayers];
+            for(int i = 0; i < numPlayers; i++){
+                this.playersID[i] = copy.playersID[i];
+            }
+
             //copies players' hands
             playerHands = new TileGroup[numPlayers];
             for (int i = 0; i < numPlayers; i++) {
@@ -137,6 +150,9 @@ public class RummikubState {
             }
             else drawPile = null;
 
+            //copies selectedGroup on table
+            this.selectedGroup = copy.selectedGroup;
+
             //copies tableTileGroups
             tableTileGroups = new ArrayList<TileGroup>();
             for (TileGroup group : copy.tableTileGroups) {
@@ -153,6 +169,7 @@ public class RummikubState {
         }
         else {
             Log.i ("state copy", "Invalid player index");
+            System.exit(-1);
         }
     }
 
@@ -206,19 +223,8 @@ public class RummikubState {
             currentPlayer = 0;
         }
         currentPlayerPlayed = false;
-    }
-
-    /**
-     * Method to draw and add tile to player's hand and update state
-     * @param playerID
-     */
-    private void drawTile(int playerID){
-        int p;
-        for(p = 0; p < numPlayers; p++){
-            if (playerID == playersID[p]){
-                playerHands[p].add(drawPile.draw());
-            }
-        }
+        selectedGroup = -1;
+        prevState= null;
     }
 
     /**
@@ -265,12 +271,12 @@ public class RummikubState {
      * @param playerID
      */
     private void giveTileToPlayer(int playerID){
-        int p;
-        for(p = 0; p < numPlayers; p++){
-            if (playerID == playersID[p]){
-                playerHands[p].add(drawPile.draw());
-            }
+        int p= getPlayerIndexByID(playerID);
+
+        if (playerID == playersID[p]){
+            playerHands[p].add(drawPile.draw());
         }
+
     }
 
     /**
@@ -280,10 +286,11 @@ public class RummikubState {
      *  - false - if player has not made move and can't draw
      *  - true - if player has made move, end draw
      */
-    private boolean canDrawAction(int playerID){
+    public boolean canDraw(int playerID){
         if (isPlayerTurn(playerID)){
             if(!(currentPlayerPlayed)){
                 giveTileToPlayer(playerID);
+                nextTurn();
                 return true;
             }
         }
@@ -297,32 +304,14 @@ public class RummikubState {
      *  - false - if player has not made move and can't knock
      *  - true - if player has made move, end turn
      */
-    private boolean canKnockAction(int playerID){
-        if (isPlayerTurn(playerID)){
-            if(currentPlayerPlayed){
-                currentPlayerPlayed = false;
-                nextTurn();
-                return true;
-            }
-        }
-        return false;
-    }
+    public boolean canKnock(int playerID){
+        if(!isPlayerTurn(playerID)) return false;
+        if(!currentPlayerPlayed) return false;
+        if(!isValidTable()) return false;
 
-    /**
-     * Method checks if a TileGroup is a valid Set to play
-     * @param playerID
-     * @param tiles
-     * @return
-     */
-    private boolean validMove(int playerID, TileGroup tiles){
-        if (tiles instanceof TileSet){
-            if(isPlayerTurn(playerID)){
-                if(((TileSet) tiles).isValidSet(tiles)){
-                    return true;
-                }
-            }
-        }
-        return false;
+        Log.i("cool kids", "daylin");
+        nextTurn();
+        return true;
     }
 
     /**
@@ -330,12 +319,10 @@ public class RummikubState {
      * @param playerID
      * @return
      */
-    private boolean canUndo(int playerID){
+    public boolean canUndo(int playerID){
         if(isPlayerTurn(playerID)){
-            if(currentPlayerPlayed){
-                restorePrevState();
-                return true;
-            }
+            restorePrevState();
+            return true;
         }
         return false;
     }
@@ -345,7 +332,7 @@ public class RummikubState {
      * @param playerID
      * @return
      */
-    private boolean canRevertAction(int playerID){
+    public boolean canRevert(int playerID){
         if(isPlayerTurn(playerID)){
             if(currentPlayerPlayed){
                 revertState();
@@ -360,7 +347,7 @@ public class RummikubState {
      * @param playerID
      * @return
      */
-    private boolean canShowMenue(int playerID){
+    public boolean canShowMenu(int playerID){
         return false;
     }
     // Returns false until menu popup function TODO update once menu setup
@@ -371,13 +358,28 @@ public class RummikubState {
      * @param tile
      * @return
      */
-    private boolean canSelectTile(int playerID, Tile tile){
+    public boolean canSelectTile(int playerID, Tile tile){
         if (isPlayerTurn(playerID)){
             if(playerHands[currentPlayer].contains(tile)){
+                saveState(); //add to undo stack
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * If group can be selected, then will highlight indicating selected group
+     * Group cannot be selected if it is not player's turn
+     */
+    private boolean canSelectGroup (int playerID, int groupIndex) {
+        if (!isPlayerTurn(playerID)) return false;
+        if (groupIndex >= tableTileGroups.size() || groupIndex < 0) return false;
+
+        saveState(); //add to undo stack
+        selectedGroup = groupIndex;
+
+        return true;
     }
 
     /**
@@ -388,13 +390,18 @@ public class RummikubState {
      * @param group2
      * @return weather it was a valid move and merged
      */
-    private boolean canConnect(int playerID, TileGroup group1, TileGroup group2){
+    public boolean canConnect(int playerID, int group1, int group2){
         if(!isPlayerTurn(playerID)) return false;
-        if(group1 == null || group2 == null) return false;
-        if(!isOnTable(group1) || !isOnTable(group2)) return false;
+        if(group1 < 0 || group1 >= tableTileGroups.size()) return false;
+        if(group2 < 0 || group2 >= tableTileGroups.size()) return false;
 
-        group1.merge(group2);
-        tableTileGroups.remove(group2);
+        TileGroup g1 = tableTileGroups.get(group1);
+        TileGroup g2 = tableTileGroups.get(group2);
+        if(!isOnTable(g1) || !isOnTable(g2)) return false;
+
+        saveState(); //add to undo stack
+        g1.merge(g2);
+        tableTileGroups.remove(g2);
 
         return true;
     }
@@ -408,15 +415,38 @@ public class RummikubState {
      * @return
      */
     private boolean isValidTable(){
+        boolean isValidTable= true;
         for(TileGroup TG : tableTileGroups){
-            TileSet tempSet = new TileSet();
-            for(int i = 0; i < TG.groupSize(); i++){
-                tempSet.add(TG.getTile(i));
+            if(TileSet.isValidSet(TG)) {
+                TileSet tempSet = new TileSet(TG);
+                tableTileGroups.add(tempSet);
+                tableTileGroups.remove(TG);
             }
-            if(!(tempSet.isValidSet(TG))){
-                return false;
+            else{ //we found an invalid set
+                isValidTable= false;
             }
         }
+        return isValidTable;
+    }
+
+    /**
+     * moves a players tile from hand to table
+     * @param playerID the player trying to play
+     * @param tileIndex the index of the tile in players hand
+     * @return whether the tile was able to be played
+     */
+    public boolean canPlayTile(int playerID, int tileIndex){
+        if (!isPlayerTurn(playerID)) return false;
+        int p = getPlayerIndexByID(playerID);
+
+        if (tileIndex < 0 || tileIndex >= playerHands[p].groupSize()) return false;
+
+        saveState();
+        TileGroup tg = new TileGroup();
+        Tile toAddToTable = playerHands[p].getTile(tileIndex);
+        tg.add(toAddToTable);
+        playerHands[p].remove(toAddToTable);
+        tableTileGroups.add(tg);
         return true;
     }
 
@@ -425,15 +455,12 @@ public class RummikubState {
      * @param tiles
      * @param playerID
      */
-    private void isMeld(TileGroup tiles, int playerID){
+    public void isMeld(TileGroup tiles, int playerID){
         int meldVal = tiles.groupPointValues();
         int i;
         if(meldVal >= 30){
-            for(i = 0; i < players.length; i++){
-                if(players[i].equals(playerID)){
-                    playersMelded[i] = true;
-                }
-            }
+            int p= getPlayerIndexByID(playerID);
+            playersMelded[p] = true;
         }
     }
 
@@ -474,6 +501,7 @@ public class RummikubState {
 
         stateString+= getNumPlayerString();
         stateString+= getPlayersString();
+        stateString+= getPlayersIDString();
         stateString+= getPlayerHandsString();
         stateString+= getPlayerScoresString();
         stateString+= getPlayersMeldedString();
@@ -654,8 +682,33 @@ public class RummikubState {
      * @return
      */
     private String getRoundString(){
-        String roundString = round + "";
-        return roundString;
+        return "round:\n"+
+                round+"\n";
+    }
+
+    /**
+     *looks like:
+     *
+     * playersID[0]:
+     * 0
+     * playersID[1]:
+     * 1
+     *
+     * @return string representation of the array playersID
+     */
+    private String getPlayersIDString(){
+        //playersIDString is the string of the entire playersID array
+        String playersIDString= "";
+        for(int i=0;i<numPlayers;i++){
+            String currPlayerIDString=
+                    "playersID["+i+"]:\n";
+            currPlayerIDString+= String.valueOf(playersID[i]);
+            currPlayerIDString+= "\n";
+
+            playersIDString+= currPlayerIDString;
+        }
+
+        return playersIDString;
     }
 }
 

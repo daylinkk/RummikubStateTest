@@ -6,12 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // Instance Variables
     private Button runTestButton;
-    private EditText runTestText;
+    private TextView runTestText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,16 +21,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Setting instance variables
         runTestButton = (Button)findViewById(R.id.buttonRunTest);
-        runTestText = (EditText)findViewById(R.id.editTextRunTest);
+        runTestText = (TextView)findViewById(R.id.editTextRunTest);
 
         runTestButton.setOnClickListener(this);
 
-        //RummikubState state= new RummikubState();
-
-        //RummikubState state2 = new RummikubState(state);
-
-        //Log.i("TAG",state.toString());
-        //Log.i("TAG",state2.toString());
+        onClick(runTestButton);
     }
 
     //@Override
@@ -46,6 +42,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RummikubState secondInstance = new RummikubState(firstInstance,0);
 
         //below call action methods and print want is happening to edit text
+        if (firstInstance.canDraw(0)) {
+            runTestText.append("Player 0 draws tile from deck\n");
+        }
+        if (firstInstance.canPlayTile(1,2)) {
+            runTestText.append("Player 1 plays tile from hand\n");
+        }
+        if (firstInstance.canUndo(1)) {
+            runTestText.append("Player 1 undoes prev play of tile from hand\n");
+        }
+        if (firstInstance.canPlayTile(1, 2)) {
+            runTestText.append ("Player 1 plays a tile\n");
+        }
+        if (firstInstance.canPlayTile(1, 2)) {
+            runTestText.append ("Player 1 plays a tile\n");
+        }
+        if (firstInstance.canConnect(1, 0, 1)) {
+            runTestText.append ("tile 1 and tile 2 connected by player 1!\n");
+        }
+        if (firstInstance.canPlayTile(1, 11)) {
+            runTestText.append ("Player 1 plays a tile\n");
+        }
+        if (firstInstance.canConnect(1, 0, 1)) {
+            runTestText.append ("tile 1,2 and tile 3 connected by player 1!\n");
+        }
+        if (firstInstance.canKnock(1)) {
+            runTestText.append ("player 1 knocked\n");
+        }
 
 
 
@@ -57,10 +80,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //call twoString methods on instance 2 and 4
         //print both strings to edit text
+        String secondString= secondInstance.toString();
+        String fourthString= secondInstance.toString();
+
         runTestText.append(thirdInstance.toString());
-        runTestText.append(thirdInstance.toString());
+        runTestText.append("---------------------------------------------------------------------------------------\n");
+        //runTestText.append(secondString);
+        //runTestText.append("---------------------------------------------------------------------------------------\n");
+        runTestText.append(firstInstance.toString());
+        //runTestText.append("---------------------------------------------------------------------------------------\n");
+       // runTestText.append(fourthString);
 
 
+
+        runTestText.append("\n\n\n\n\n"
+                + secondString.equals(fourthString));
 
     }
 

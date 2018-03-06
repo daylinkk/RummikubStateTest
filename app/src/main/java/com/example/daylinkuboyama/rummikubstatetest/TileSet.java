@@ -1,5 +1,7 @@
 package com.example.daylinkuboyama.rummikubstatetest;
 
+import android.util.Log;
+
 /**
  * class TileSet
  * Subclass of TileGroup
@@ -23,6 +25,28 @@ public class TileSet extends TileGroup {
      */
     public TileSet(){
         super();
+    }
+
+    /**
+     * constructor to make set out of a given group
+     * @param group the group to turn into a set
+     */
+    public TileSet(TileGroup group){
+        super();
+        if(isRun(group)){
+            isRun= true;
+        }
+        else if(isBook(group)){
+            isRun= false;
+        }
+        else{
+            Log.i("TileSet","Invalid Set");
+            System.exit(-1);
+        }
+
+        for(Tile t : group.tiles){
+            this.add(t);
+        }
     }
 
     /**

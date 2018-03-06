@@ -8,13 +8,20 @@
     tools:context="com.example.daylinkuboyama.rummikubstatetest.MainActivity">
 
 
-    <EditText
-        android:id="@+id/editTextRunTest"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
-        android:ems="10"
-        android:inputType="textMultiLine" />
+        android:layout_weight="8">
+
+        <TextView
+            android:id="@+id/editTextRunTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:keyboardNavigationCluster="false" />
+    </ScrollView>
 
     <Button
         android:id="@+id/buttonRunTest"
