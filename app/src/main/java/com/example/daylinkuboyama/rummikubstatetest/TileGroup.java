@@ -21,6 +21,9 @@ public class TileGroup {
     //an array list of tile objects
     private ArrayList <Tile> tiles;
 
+    /**
+     * TileGroup Initial Constructor
+     */
     public TileGroup(){
         this.tiles = new ArrayList<>();
     }
@@ -37,22 +40,55 @@ public class TileGroup {
         }
     }
 
+    /**
+     * Method to add a Tile to ArrayList tiles
+     * @param addTile
+     */
     public void add(Tile addTile){
         tiles.add(addTile);
     }
 
+    /**
+     * Method to remove Tile from TileGroup tiles
+     * @param remove
+     */
     public void remove(Tile remove){
         this.tiles.remove(remove);
     }
 
+    /**
+     * Helper Method to return size of TileGroup
+     * @return tiles.size
+     */
     public int groupSize(){
         return this.tiles.size();
     }
 
+    /**
+     * Add all the values of tiles in a TileGroup
+     * @return
+     */
+    public int groupPointValues(){
+        int rtnVal = 0;
+        for(Tile t : tiles){
+            rtnVal = rtnVal + t.getValue();
+        }
+        return rtnVal;
+    }
+
+    /**
+     * Get tile based on index
+     * @param index
+     * @return
+     */
     public Tile getTile(int index){
         return this.tiles.get(index);
     }
 
+    /**
+     * Getter method to return ArrayList of Tiles
+     * @return
+     */
     public ArrayList getTileGroup(){
         return this.tiles;
     }

@@ -8,8 +8,11 @@ import com.example.daylinkuboyama.rummikubstatetest.GamePlayer;
 
 public class UndoAction extends GameAction {
 
+    /**
+     * Constructor for UndoAction
+     * @param player
+     */
     public UndoAction(GamePlayer player){
-
         super(player);
     }
 }

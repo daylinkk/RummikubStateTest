@@ -35,6 +35,7 @@ public class Tile {
     public static final int BLACK = Color.argb(255,0,0,0);
     public static final int GREEN = Color.argb(255,50,205,50);
     public static final int TILECOLOR= Color.argb(255,255,250,250);
+
     //purpose of array is to assign numerical value to each color
     public static final int[] colorArray = {BLUE, RED, BLACK, GREEN};
 
@@ -60,26 +61,50 @@ public class Tile {
         this.color = copyTile.getColor();
     }
 
+    /**
+     * Getter method to get X location
+     * @return
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Getter method to get Y location
+     * @return
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Getter method to get Tile value
+     * @return
+     */
     public int getValue() {
         return value;
     }
 
+    /**
+     * Getter method to get color val
+     * @return
+     */
     public int getColor() {
         return color;
     }
 
+    /**
+     * Setter Method for x location
+     * @param x
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * Setter mehtod for Y location
+     * @param y
+     */
     public void setY(int y) {
         this.y = y;
     }

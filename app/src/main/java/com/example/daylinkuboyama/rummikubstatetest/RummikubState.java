@@ -26,9 +26,9 @@ public class RummikubState {
     private TileGroup[] playerHands; //groups of tiles in players' hands
     private int[] playerScores; //indicates score of each player
     private boolean[] playersMelded; //indicates whether each player has melded
-    private int[] playersID; //parallel to players[], indicates weather each player has melded
+    private int[] playersID; //parallel to players[], TODO do we need this?
     private int currentPlayer; //index of players[], indicates whose turn it is
-    private Boolean currentPlayerPlayed; //Boolean if Current player has made a move yet.
+    private boolean currentPlayerPlayed; //Boolean if Current player has made a move yet.
 
     private TileGroup drawPile; //tiles that are not played/in player's hand
 
@@ -192,6 +192,17 @@ public class RummikubState {
     }
 
     /**
+     * Method to change variables for next player's turn
+     */
+    private void nextTurn(){
+        currentPlayer++;
+        if(currentPlayer >= 4){
+            currentPlayer = 0;
+        }
+        currentPlayerPlayed = false;
+    }
+
+    /**
      * Method to draw and add tile to player's hand and update state
      * @param playerID
      */
@@ -199,22 +210,11 @@ public class RummikubState {
         int p;
         for(p = 0; p < numPlayers; p++){
             if (playerID == playersID[p]){
-                Random rando = new Random();
-                int randomint = rando.nextInt(drawPile.groupSize()-1);
-                Tile tempTile = drawPile.getTile(randomint);
-                drawPile.getTileGroup().remove(randomint);
-                playerHands[p].add(tempTile);
+                playerHands[p].add(drawPile.draw());
             }
         }
     }
 
-    /**
-     * Helper method which returns if a player can draw
-     * @param playerID
-     * @return
-     *  - false - if player has made move and can't draw
-     *  - true - if player hasn't made move
-     */
     /**
      * sets prevState to a copy of the current state
      */
@@ -253,14 +253,21 @@ public class RummikubState {
         return true;
     }
 
-    private Boolean canDraw(int playerID){
+    /**
+     * Helper method which returns if a player can draw
+     * @param playerID
+     * @return
+     *  - false - if player has not made move and can't draw
+     *  - true - if player has made move, end draw
+     */
+    private boolean canDraw(int playerID){
         if (isPlayerTurn(playerID)){
             if(!(currentPlayerPlayed)){
+                drawTile(playerID);
                 return true;
             }
         }
         return false;
-
     }
 
     /**
@@ -270,9 +277,11 @@ public class RummikubState {
      *  - false - if player has not made move and can't knock
      *  - true - if player has made move, end turn
      */
-    private Boolean canKnock(int playerID){
+    private boolean canKnock(int playerID){
         if (isPlayerTurn(playerID)){
             if(currentPlayerPlayed){
+                currentPlayerPlayed = false;
+                nextTurn();
                 return true;
             }
         }
@@ -285,7 +294,7 @@ public class RummikubState {
      * @param tiles
      * @return
      */
-    private Boolean validMove(int playerID, TileGroup tiles){
+    private boolean validMove(int playerID, TileGroup tiles){
         if (tiles instanceof TileSet){
             if(isPlayerTurn(playerID)){
                 if(((TileSet) tiles).isValidSet()){
@@ -302,7 +311,7 @@ public class RummikubState {
      * @param playerID
      * @return
      */
-    private Boolean canUndo(int playerID){
+    private boolean canUndo(int playerID){
         if(isPlayerTurn(playerID)){
             if(currentPlayerPlayed){
                 return true;
@@ -316,7 +325,7 @@ public class RummikubState {
      * @param playerID
      * @return
      */
-    private Boolean canShowMenue(int playerID){
+    private boolean canShowMenue(int playerID){
         return false;
     }
     // Returns false until menu popup function TODO update once menu setup
@@ -327,13 +336,30 @@ public class RummikubState {
      * @param tile
      * @return
      */
-    private Boolean canSelectTile(int playerID, Tile tile){
+    private boolean canSelectTile(int playerID, Tile tile){
         if (isPlayerTurn(playerID)){
             if(playerHands[currentPlayer].contains(tile)){
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     *
+     * @param tiles
+     * @param playerID
+     */
+    private void isMeld(TileGroup tiles, int playerID){
+        int meldVal = tiles.groupPointValues();
+        int i;
+        if(meldVal >= 30){
+            for(i = 0; i < players.length; i++){
+                if(players[i].equals(playerID)){
+                    playersMelded[i] = true;
+                }
+            }
+        }
     }
 
     /**

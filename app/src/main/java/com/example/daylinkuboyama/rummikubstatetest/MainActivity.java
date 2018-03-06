@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // Instance Variables
     private Button runTestButton;
     private EditText runTestText;
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Setting instance variables
         runTestButton = (Button)findViewById(R.id.buttonRunTest);
         runTestText = (EditText)findViewById(R.id.editTextRunTest);
 
