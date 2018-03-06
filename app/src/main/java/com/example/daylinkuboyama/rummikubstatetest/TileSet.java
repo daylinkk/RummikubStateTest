@@ -2,7 +2,10 @@ package com.example.daylinkuboyama.rummikubstatetest;
 
 /**
  * class TileSet
- *
+ * Subclass of TileGroup
+ * These are valid groups of tiles on the table.
+ * Minimum of 3 tiles.
+ * A TileSet may be either a book or a run of tiles
  *
  *
  * @author Daylin Kuboyama

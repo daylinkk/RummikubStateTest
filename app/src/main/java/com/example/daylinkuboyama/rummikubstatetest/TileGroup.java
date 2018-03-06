@@ -5,7 +5,8 @@ import java.util.ArrayList;
 /**
  * class TileGroup
  *
- * purpose: A generic grouping of tiles
+ * Any grouping of tiles with a minimum of 1 tile
+ * Used to save tiles on table and in player's hands
  * (example: Tiles in player's racks)
  * check values of set when melding
  *
@@ -181,6 +182,5 @@ public class TileGroup {
 
         return groupString;
     }
-
 
 }

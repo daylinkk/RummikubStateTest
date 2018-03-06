@@ -5,7 +5,12 @@ import com.example.daylinkuboyama.rummikubstatetest.TileGroup;
 import com.example.daylinkuboyama.rummikubstatetest.TileSet;
 
 /**
- * Created by lytle on 3/4/2018.
+ * Class PlaceNewTileGroup
+ *
+ * @author Daylin Kuboyama
+ * @author Harry Thoma
+ * @author Riley Snook
+ * @author Chris Lytle
  */
 
 public class PlaceNewTileGroup extends GameAction {

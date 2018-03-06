@@ -3,8 +3,15 @@ package com.example.daylinkuboyama.rummikubstatetest.Actions;
 import com.example.daylinkuboyama.rummikubstatetest.GamePlayer;
 
 /**
- * Created by lytle on 3/4/2018.
+ * GameAction Class
+ * Parent class to all actions.
+ *
+ * @author Daylin Kuboyama
+ * @author Harry Thoma
+ * @author Riley Snook
+ * @author Chris Lytle
  */
+
 
 public class GameAction {
 

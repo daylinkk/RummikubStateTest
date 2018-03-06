@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * class RummikubState
- *
- *
+ * Class RummikubState
+ * Subclass of GameState
+ * Class to store all required variables to run and save the game
+ * Verifies action methods and updates state after every valid action
+ * Print's current state of game using toString methods
  *
  * @author Daylin Kuboyama
  * @author Harry Thoma
@@ -29,6 +31,9 @@ public class RummikubState {
     private int[] playersID; //parallel to players[], TODO do we need this?
     private int currentPlayer; //index of players[], indicates whose turn it is
     private boolean currentPlayerPlayed; //Boolean if Current player has made a move yet.
+    // TODO possible variables timer int
+
+    private int round;
 
     private TileGroup drawPile; //tiles that are not played/in player's hand
 
@@ -47,6 +52,7 @@ public class RummikubState {
         this.players = new String[numPlayers];
         this.players[0] = "Matt";
         this.players[1] = "Nux";
+        this.round = 1;
 
         initDrawPile();
 
@@ -93,7 +99,7 @@ public class RummikubState {
         if (-1 <= playerIndex && playerIndex < copy.numPlayers) {
             //copies num of players
             numPlayers = copy.numPlayers;
-
+            round = copy.round;
             //copies names of players
             players = new String[numPlayers];
             for (int i = 0; i < numPlayers; i++) {
@@ -196,7 +202,7 @@ public class RummikubState {
      */
     private void nextTurn(){
         currentPlayer++;
-        if(currentPlayer >= 4){
+        if(currentPlayer >= numPlayers){
             currentPlayer = 0;
         }
         currentPlayerPlayed = false;
@@ -255,16 +261,29 @@ public class RummikubState {
     }
 
     /**
+     * Method to draw and add tile to player's hand and update state
+     * @param playerID
+     */
+    private void giveTileToPlayer(int playerID){
+        int p;
+        for(p = 0; p < numPlayers; p++){
+            if (playerID == playersID[p]){
+                playerHands[p].add(drawPile.draw());
+            }
+        }
+    }
+
+    /**
      * Helper method which returns if a player can draw
      * @param playerID
      * @return
      *  - false - if player has not made move and can't draw
      *  - true - if player has made move, end draw
      */
-    private boolean canDraw(int playerID){
+    private boolean canDrawAction(int playerID){
         if (isPlayerTurn(playerID)){
             if(!(currentPlayerPlayed)){
-                drawTile(playerID);
+                giveTileToPlayer(playerID);
                 return true;
             }
         }
@@ -278,7 +297,7 @@ public class RummikubState {
      *  - false - if player has not made move and can't knock
      *  - true - if player has made move, end turn
      */
-    private boolean canKnock(int playerID){
+    private boolean canKnockAction(int playerID){
         if (isPlayerTurn(playerID)){
             if(currentPlayerPlayed){
                 currentPlayerPlayed = false;
@@ -303,7 +322,6 @@ public class RummikubState {
                 }
             }
         }
-
         return false;
     }
 
@@ -315,6 +333,22 @@ public class RummikubState {
     private boolean canUndo(int playerID){
         if(isPlayerTurn(playerID)){
             if(currentPlayerPlayed){
+                restorePrevState();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param playerID
+     * @return
+     */
+    private boolean canRevertAction(int playerID){
+        if(isPlayerTurn(playerID)){
+            if(currentPlayerPlayed){
+                revertState();
                 return true;
             }
         }
@@ -370,6 +404,23 @@ public class RummikubState {
     }
 
     /**
+     * Checks every TileGroup of table is a valid set
+     * @return
+     */
+    private boolean isValidTable(){
+        for(TileGroup TG : tableTileGroups){
+            TileSet tempSet = new TileSet();
+            for(int i = 0; i < TG.groupSize(); i++){
+                tempSet.add(TG.getTile(i));
+            }
+            if(!(tempSet.isValidSet())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      *
      * @param tiles
      * @param playerID
@@ -384,6 +435,21 @@ public class RummikubState {
                 }
             }
         }
+    }
+
+    /**
+     * Getter method to get player index by player ID
+     * @param playerID
+     * @return
+     */
+    private int getPlayerIndexByID(int playerID){
+        int i, index = -1;
+        for(i = 0; i < players.length; i++){
+            if (playersID[i] == playerID){
+                index = i;
+            }
+        }
+        return index;
     }
 
     /**
@@ -414,6 +480,7 @@ public class RummikubState {
         stateString+= getCurrentPlayerString();
         stateString+= getDrawPileString();
         stateString+= getTableTileGroupString();
+        stateString+= getRoundString();
 
         return stateString;
     }
@@ -581,4 +648,14 @@ public class RummikubState {
 
         return tableGroupsString;
     }
+
+    /**
+     *
+     * @return
+     */
+    private String getRoundString(){
+        String roundString = round + "";
+        return roundString;
+    }
 }
+

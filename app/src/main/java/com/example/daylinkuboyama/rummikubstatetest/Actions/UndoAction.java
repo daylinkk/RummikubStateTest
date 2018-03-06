@@ -3,7 +3,14 @@ package com.example.daylinkuboyama.rummikubstatetest.Actions;
 import com.example.daylinkuboyama.rummikubstatetest.GamePlayer;
 
 /**
- * Created by snook on 3/4/2018.
+ * Undo Action class
+ * Subclass of GameAction
+ * Action for when the user wants to perform a undo action on their turn
+ *
+ * @author Daylin Kuboyama
+ * @author Harry Thoma
+ * @author Riley Snook
+ * @author Chris Lytle
  */
 
 public class UndoAction extends GameAction {

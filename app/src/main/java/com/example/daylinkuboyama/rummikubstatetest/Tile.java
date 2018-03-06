@@ -7,8 +7,9 @@ import android.util.Log;
 
 /**
  * class Tile
- *
+ * Saves value and color of tile.
  * This class draws Tiles; includes all basic framework.
+ * Tile's x and y cordinates on screen.
  *
  * @author Daylin Kuboyama
  * @author Harry Thoma
