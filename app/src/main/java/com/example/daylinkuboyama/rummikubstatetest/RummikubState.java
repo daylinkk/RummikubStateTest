@@ -309,7 +309,7 @@ public class RummikubState {
         if(!currentPlayerPlayed) return false;
         if(!isValidTable()) return false;
 
-        Log.i("cool kids", "daylin");
+        Log.i("cool kids", "daylin ");
         nextTurn();
         return true;
     }
