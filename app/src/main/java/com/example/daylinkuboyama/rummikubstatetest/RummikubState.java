@@ -413,7 +413,7 @@ public class RummikubState {
             for(int i = 0; i < TG.groupSize(); i++){
                 tempSet.add(TG.getTile(i));
             }
-            if(!(tempSet.isValidSet())){
+            if(!(tempSet.isValidSet(TG))){
                 return false;
             }
         }
