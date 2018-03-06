@@ -2,10 +2,8 @@ package com.example.daylinkuboyama.rummikubstatetest;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -66,10 +64,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (firstInstance.canConnect(1, 0, 1)) {
             runTestText.append ("tile 1,2 and tile 3 connected by player 1!\n");
         }
-        if (firstInstance.canKnock(1)) {
-            runTestText.append ("player 1 knocked\n");
+        if (firstInstance.canPlayTile(1, 3)) {
+            runTestText.append("Player 1 plays tile\n");
         }
-
+        if (firstInstance.canConnect(1, 0, 1)) {
+            runTestText.append ("tile 1,2,3 and tile 4 connected by player 1!\n");
+        }
+        if (firstInstance.canRevert(1)) {
+            runTestText.append ("player 1 reverted\n");
+        }
+        //todo fix & implement canKnock action
 
 
         //creates a new instance of gamestate
@@ -90,8 +94,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         runTestText.append(firstInstance.toString());
         //runTestText.append("---------------------------------------------------------------------------------------\n");
        // runTestText.append(fourthString);
-
-
 
         runTestText.append("\n\n\n\n\n"
                 + secondString.equals(fourthString));

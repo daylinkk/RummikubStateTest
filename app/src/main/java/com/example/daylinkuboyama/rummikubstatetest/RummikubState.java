@@ -3,7 +3,6 @@ package com.example.daylinkuboyama.rummikubstatetest;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Class RummikubState
@@ -87,6 +86,7 @@ public class RummikubState {
 
     /**
      * Copy constructor for gameState
+     *
      * @param copy rummikubState to copy
      * @param playerIndex player that this is a copy for
      *                    if playerIndex == -1, a complete copy is made
@@ -96,8 +96,9 @@ public class RummikubState {
     }
 
     /**
-     * Called from copy contructor for gameState
+     * Called from copy constructor for gameState
      * sets this RummikubState to a deep copy of copy
+     *
      * @param copy rummikubState to copy
      * @param playerIndex player that this is a copy for
      *                    if playerIndex == -1, a complete copy is made
@@ -202,8 +203,9 @@ public class RummikubState {
 
     /**
      * Helper method that returns boolean if the given playerID has
+     *
      * @param playerID
-     * @return
+     * @return whether it is the player's turn
      */
     private boolean isPlayerTurn(int playerID){
         if(playerID == playersID[currentPlayer]){
@@ -215,7 +217,7 @@ public class RummikubState {
     }
 
     /**
-     * Method to change variables for next player's turn
+     * change variables for next player's turn
      */
     private void nextTurn(){
         currentPlayer++;
@@ -238,6 +240,7 @@ public class RummikubState {
     /**
      * sets this state to the previous state
      * used for undo
+     *
      * @return whether there was a prevstate to restore
      */
     private boolean restorePrevState(){
@@ -249,7 +252,8 @@ public class RummikubState {
 
     /**
      * changes this state to reflect the furthest back prevState
-     * used for revert
+     * used for revert function
+     *
      * @return whether there was a prevstate to revert to
      */
     private boolean revertState(){
@@ -268,6 +272,7 @@ public class RummikubState {
 
     /**
      * Method to draw and add tile to player's hand and update state
+     *
      * @param playerID
      */
     private void giveTileToPlayer(int playerID){
@@ -281,6 +286,7 @@ public class RummikubState {
 
     /**
      * Helper method which returns if a player can draw
+     *
      * @param playerID
      * @return
      *  - false - if player has not made move and can't draw
@@ -299,6 +305,7 @@ public class RummikubState {
 
     /**
      * Helper method which returns if a player can knock
+     *
      * @param playerID
      * @return
      *  - false - if player has not made move and can't knock
@@ -306,16 +313,18 @@ public class RummikubState {
      */
     public boolean canKnock(int playerID){
         if(!isPlayerTurn(playerID)) return false;
-        if(!currentPlayerPlayed) return false;
-        if(!isValidTable()) return false;
-
-        Log.i("cool kids", "daylin ");
-        nextTurn();
-        return true;
+        else if(!currentPlayerPlayed) return false;
+        else if(!isValidTable()) return false; //todo java seems to skip to return statement
+        else {
+            Log.i("cool kids", "daylin ");
+            nextTurn();
+            return true;
+        }
     }
 
     /**
-     * Method to determine if a player can make a move.
+     * Method to determine if a player can make a move
+     *
      * @param playerID
      * @return
      */
@@ -325,34 +334,35 @@ public class RummikubState {
             return true;
         }
         return false;
-    }
+}
 
     /**
+     * Sets table to the first state that it was in when player's turn started
      *
      * @param playerID
-     * @return
+     * @return whether the table was reverted
      */
     public boolean canRevert(int playerID){
         if(isPlayerTurn(playerID)){
-            if(currentPlayerPlayed){
-                revertState();
-                return true;
-            }
+            revertState();
+            return true;
         }
         return false;
     }
 
     /**
      * Player can select the menu to display a popup
+     * Returns false until menu popup function TODO update once menu setup
+     *
      * @param playerID
      * @return
      */
     public boolean canShowMenu(int playerID){
         return false;
     }
-    // Returns false until menu popup function TODO update once menu setup
 
     /**
+     * todo implement
      *
      * @param playerID
      * @param tile
@@ -371,6 +381,8 @@ public class RummikubState {
     /**
      * If group can be selected, then will highlight indicating selected group
      * Group cannot be selected if it is not player's turn
+     *
+     * @return whether group can be selected
      */
     private boolean canSelectGroup (int playerID, int groupIndex) {
         if (!isPlayerTurn(playerID)) return false;
@@ -412,7 +424,9 @@ public class RummikubState {
 
     /**
      * Checks every TileGroup of table is a valid set
-     * @return
+     * Converts valid tile groups to tile sets
+     *
+     * @return whether every group on table is valid set
      */
     private boolean isValidTable(){
         boolean isValidTable= true;
@@ -431,6 +445,7 @@ public class RummikubState {
 
     /**
      * moves a players tile from hand to table
+     *
      * @param playerID the player trying to play
      * @param tileIndex the index of the tile in players hand
      * @return whether the tile was able to be played
@@ -451,6 +466,7 @@ public class RummikubState {
     }
 
     /**
+     * todo we think this is rules
      *
      * @param tiles
      * @param playerID
@@ -466,8 +482,9 @@ public class RummikubState {
 
     /**
      * Getter method to get player index by player ID
+     *
      * @param playerID
-     * @return
+     * @return the index of player ID, -1 if not found
      */
     private int getPlayerIndexByID(int playerID){
         int i, index = -1;

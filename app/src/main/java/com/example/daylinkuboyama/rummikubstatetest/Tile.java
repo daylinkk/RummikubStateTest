@@ -9,7 +9,7 @@ import android.util.Log;
  * class Tile
  * Saves value and color of tile.
  * This class draws Tiles; includes all basic framework.
- * Tile's x and y cordinates on screen.
+ * Tile's x and y coordinates on screen.
  *
  * @author Daylin Kuboyama
  * @author Harry Thoma
@@ -139,8 +139,8 @@ public class Tile {
 
     /**
      * returns a string representation of this tile
-     * will be a character represtenting it's color
-     * followed immediatly with it's value
+     * will be a character representing it's color
+     * followed immediately with it's value
      *
      * e.g. a Black 12 will be "B12"
      * characters correspond to colors as such:
