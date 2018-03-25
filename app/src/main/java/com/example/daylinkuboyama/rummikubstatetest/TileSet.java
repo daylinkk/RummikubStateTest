@@ -1,12 +1,13 @@
 package com.example.daylinkuboyama.rummikubstatetest;
 
+import android.util.Log;
+
 /**
  * class TileSet
  * Subclass of TileGroup
  * These are valid groups of tiles on the table.
  * Minimum of 3 tiles.
  * A TileSet may be either a book or a run of tiles
- *
  *
  * @author Daylin Kuboyama
  * @author Harry Thoma
@@ -26,7 +27,31 @@ public class TileSet extends TileGroup {
     }
 
     /**
+     * constructor to make set out of a given group
+     *
+     * @param group the group to turn into a set
+     */
+    public TileSet(TileGroup group){
+        super();
+        if(isRun(group)){
+            isRun= true;
+        }
+        else if(isBook(group)){
+            isRun= false;
+        }
+        else{
+            Log.i("TileSet","Invalid Set");
+            System.exit(-1);
+        }
+
+        for(Tile t : group.tiles){
+            this.add(t);
+        }
+    }
+
+    /**
      * Copy constructor for tileSets
+     *
      * @param copyTileSet tileSet to copy
      */
     public TileSet (TileSet copyTileSet){
@@ -36,6 +61,7 @@ public class TileSet extends TileGroup {
 
     /**
      * Check if group is a valid set
+     *
      * @param group the group to check
      * @return whether group is a valid set
      */
@@ -44,9 +70,10 @@ public class TileSet extends TileGroup {
     }
 
     /**
+     * Determines whether the group passed in is a run or not
      *
      * @param group the group to check
-     * @return wheter it is a run
+     * @return whether it is a run
      */
     private static boolean isRun(TileGroup group){
         if(group == null) return false;
@@ -80,9 +107,10 @@ public class TileSet extends TileGroup {
     }
 
     /**
+     * Determines whether group passed in is book or not
      *
      * @param group the group to check
-     * @return wheter it is a book
+     * @return whether it is a book
      */
     private static boolean isBook(TileGroup group){
         if(group == null) return false;
@@ -148,5 +176,4 @@ public class TileSet extends TileGroup {
 
         return groupString + "_" + typeString;
     }
-
 }

@@ -1,6 +1,7 @@
 package com.example.daylinkuboyama.rummikubstatetest;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * class TileGroup
@@ -118,9 +119,11 @@ public class TileGroup {
      * arranges this tile group into a random order
      */
     public void randomize(){
+        Random rand= new Random(45454);
+
         //go through the array list and choose a rondom position to swap with
         for(int i=0;i<tiles.size();i++){
-            int randPos= (int)(Math.random()*tiles.size());
+            int randPos= rand.nextInt(tiles.size());
             //now swap them
             Tile temp= tiles.get(i);
             tiles.set(i,tiles.get(randPos));
