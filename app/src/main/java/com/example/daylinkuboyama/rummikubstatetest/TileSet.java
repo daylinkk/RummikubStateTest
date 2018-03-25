@@ -158,6 +158,25 @@ public class TileSet extends TileGroup {
     }
 
     /**
+     * checks if adding this tile to the set would
+     * yeild a valid set
+     * @param tile the tile we are checking to add
+     * @return whether tile can be added
+     */
+    public boolean canAdd(Tile tile){
+        //adds the tile for checking purposes
+        add(tile);
+
+        //check if this is still a valid set
+        boolean isValid= isValidSet(this);
+
+        //we don't actually want to change this set
+        remove(tile);
+
+        return isValid;
+    }
+
+    /**
      * this tile set as a string
      * it will be the tilegroup string
      * immediately followed by a "_"
