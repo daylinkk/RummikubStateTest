@@ -30,6 +30,14 @@ public class TileGroup {
     }
 
     /**
+     * Constructor that takes in an ArrayList of given Tiles
+     * @param tileList
+     */
+    public TileGroup(ArrayList<Tile> tileList){
+        this.tiles = tileList;
+    }
+
+    /**
      * Copy constructor for tileGroups
      * @param copyTileGroup tileGroup to copy
      */
@@ -129,8 +137,6 @@ public class TileGroup {
          *  use set(int,object) method
          */
     }
-
-
 
     /**
      * removes the top tile from the group and returns it

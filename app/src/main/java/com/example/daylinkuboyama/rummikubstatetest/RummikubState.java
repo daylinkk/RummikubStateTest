@@ -49,10 +49,12 @@ public class RummikubState {
      */
     public RummikubState() {
         this.numPlayers = 2;
+        this.round = 1;
         this.players = new String[numPlayers];
         this.players[0] = "Matt";
         this.players[1] = "Nux";
-        this.round = 1;
+        this.players[0] = "0";
+        this.players[1] = "1";
 
         initDrawPile();
 
@@ -399,6 +401,12 @@ public class RummikubState {
         return true;
     }
 
+    /**
+     * Method to check if given TileGroup is on the current table
+     * Calls .contains(group) from the class TileGroup
+     * @param group
+     * @return
+     */
     private boolean isOnTable(TileGroup group){
         return tableTileGroups.contains(group);
     }
@@ -408,11 +416,15 @@ public class RummikubState {
      * @return
      */
     private boolean isValidTable(){
+        // Iterate though TileGroups on table
         for(TileGroup TG : tableTileGroups){
+            // Create new TileSet
             TileSet tempSet = new TileSet();
+            // Iterate through TileGroup, add to new TileSet
             for(int i = 0; i < TG.groupSize(); i++){
                 tempSet.add(TG.getTile(i));
             }
+            // Check if TileSet is a valid set
             if(!(tempSet.isValidSet(TG))){
                 return false;
             }
@@ -421,20 +433,29 @@ public class RummikubState {
     }
 
     /**
-     *
+     * Method to check if TileGroup is a proper meld
      * @param tiles
      * @param playerID
      */
-    private void isMeld(TileGroup tiles, int playerID){
+    private boolean isMeld(TileGroup tiles, int playerID){
         int meldVal = tiles.groupPointValues();
         int i;
-        if(meldVal >= 30){
-            for(i = 0; i < players.length; i++){
-                if(players[i].equals(playerID)){
-                    playersMelded[i] = true;
-                }
+        if(meldVal < 30){// If meldVal is under 30
+            return false;
+        }
+        else if(tiles instanceof TileSet){
+            if(((TileSet) tiles).isValidSet(tiles)){
+                playersMelded[getPlayerIndexByID(playerID)] = true;
+                return true;
             }
         }
+        else if(meldVal >= 30){
+            for(i = 0; i < players.length; i++){
+                playersMelded[getPlayerIndexByID(playerID)] = true;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -650,7 +671,7 @@ public class RummikubState {
     }
 
     /**
-     *
+     * Getter method for round integer
      * @return
      */
     private String getRoundString(){
