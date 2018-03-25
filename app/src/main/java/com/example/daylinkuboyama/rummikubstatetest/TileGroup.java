@@ -34,8 +34,10 @@ public class TileGroup {
      * Constructor that takes in an ArrayList of given Tiles
      * @param tileList
      */
-    public TileGroup(ArrayList<Tile> tileList){
-        this.tiles = tileList;
+    public TileGroup(Tile ... tileList){
+        for(Tile T : tileList){
+            tiles.add(T);
+        }
     }
 
     /**

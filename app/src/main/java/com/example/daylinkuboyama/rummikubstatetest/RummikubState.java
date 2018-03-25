@@ -321,14 +321,12 @@ public class RummikubState {
             nextTurn();
             return true;
         }
-        return false;
     }
 
     /**
      * Method to determine if a player can make a move
      *
      * @param playerID
-     * @param tiles
      * @return
      */
     public boolean canUndo(int playerID){
